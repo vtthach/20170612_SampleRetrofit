@@ -1,0 +1,98 @@
+apply plugin: 'com.android.application'
+apply plugin: 'me.tatarka.retrolambda'
+
+android {
+    compileSdkVersion androidCompileSdkVersion
+    buildToolsVersion androidBuildToolsVersion
+
+    defaultConfig {
+        applicationId "com.sf0404.samplemvp"
+
+        minSdkVersion androidMinSdkVersion
+        targetSdkVersion androidTargetSdkVersion
+
+        versionCode 1
+        versionName "0.1"
+    }
+
+    signingConfigs {
+        release {
+//            storeFile file("../knox.keystore") // TODO
+//            storePassword KEYSTORE_PASSWORD // TODO
+//            keyAlias KEYSTORE_ALIAS // TODO
+//            keyPassword KEY_PASSWORD
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            signingConfig signingConfigs.release
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    productFlavors {
+        dev {
+        }
+        prod {
+        }
+    }
+
+    dependencies {
+        repositories {
+            jcenter()
+        }
+
+        repositories {
+            flatDir { dirs '../libs' }
+        }
+    }
+
+    packagingOptions {
+        exclude 'LICENSE.txt'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/ASL2.0'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+    }
+
+    lintOptions {
+        quiet true
+        abortOnError true
+        disable 'InvalidPackage' // Some libraries have issues with this
+        disable 'OldTargetApi' //Lint gives this warning but SDK 20 would be Android L Beta.
+        disable 'IconDensities' //For testing purpose. This is safe to remove.
+        disable 'IconMissingDensityFolder' //For testing purpose. This is safe to remove.
+    }
+
+    compileOptions {
+        sourceCompatibility javaVersion
+        targetCompatibility javaVersion
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile fileTree(include: ['*.jar'], dir: '../libs')
+
+    compile utilDependencies.appcompatV7
+    compile utilDependencies.supportDesignLibrary
+    compile utilDependencies.timber
+
+    // Dependency Injection
+    compile utilDependencies.dagger
+    annotationProcessor utilDependencies.daggerCompiler
+    provided utilDependencies.javaxAnnotation
+
+    // Butter Knife
+    compile utilDependencies.butterKnife
+    annotationProcessor utilDependencies.butterKnifeCompiler
+
+    // Reactive Java for Android
+    compile utilDependencies.rxJava
+    compile utilDependencies.rxAndroid
+
+    // Test
+    testCompile testDependencies.junit
+}

@@ -1,0 +1,56 @@
+apply plugin: 'com.android.library'
+apply plugin: 'me.tatarka.retrolambda'
+
+android {
+    compileSdkVersion androidCompileSdkVersion
+    buildToolsVersion androidBuildToolsVersion
+
+    defaultConfig {
+        minSdkVersion androidMinSdkVersion
+        targetSdkVersion androidTargetSdkVersion
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility javaVersion
+        targetCompatibility javaVersion
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    // Dependency Injection
+    compile utilDependencies.dagger
+    annotationProcessor utilDependencies.daggerCompiler
+    provided utilDependencies.javaxAnnotation
+
+    compile utilDependencies.appcompatV7
+    testCompile testDependencies.junit
+
+    // Retrofit 2
+    compile(utilDependencies.retrofit) { exclude module: 'okhttp' }
+    compile utilDependencies.retrofitRxjava
+    compile utilDependencies.retrofitJsonConverter
+    compile utilDependencies.okHttp
+    compile utilDependencies.okHttpInterceptor
+
+    // Reactive Java for Android
+    compile utilDependencies.rxJava
+    compile utilDependencies.rxAndroid
+
+    // Timber log
+    compile utilDependencies.timber
+    // Achilles
+//    compile utilDependencies.achilles
+}
